@@ -1,0 +1,121 @@
+1a.)
+
+IN: -p GTATTTA -a KMP src/test/resources/SwinepoxVirus.fasta --debug --time
+TREFFER: 49
+VGL KMP: 146748
+ZEIT KMP: 0.2158507 Sekunden
+VGL BM: 227579
+ZEIT BM: 0.2394201 Sekunden
+VGL NAIVE: 178111
+ZEIT NAIVE: 0.2041477 Sekunden
+
+IN: -p TTTCGAAA -a KMP src/test/resources/SwinepoxVirus.fasta --debug --time
+TREFFER: 5
+VGL KMP: 146489
+ZEIT KMP: 0.2201064 Sekunden
+VGL BM: 207154
+ZEIT BM: 0.2489114 Sekunden
+VGL NAIVE: 223753
+ZEIT NAIVE: 0.228459 Sekunden
+
+IN: -p AAATTGACG -a KMP src/test/resources/SwinepoxVirus.fasta --debug --time
+TREFFER: 0
+VGL KMP: 146454
+ZEIT KMP: 0.2247216 Sekunden
+VGL BM: 168542
+ZEIT BM: 0.2318606 Sekunden
+VGL NAIVE: 227294
+ZEIT NAIVE: 0.240375 Sekunden
+
+1b.)
+IN: -p GAATTC -a KMP src/test/resources/T.thermophilus.fasta --debug --time
+TREFFER: 13
+VGL KMP: 1894942
+ZEIT KMP: 0.4794535 Sekunden
+VGL BM: 2622989
+ZEIT BM: 0.6780171 Sekunden
+VGL NAIVE: 2698295
+ZEIT NAIVE: 0.5117159 Sekunden
+
+IN: -p GGATCC -a KMP src/test/resources/T.thermophilus.fasta --debug --time
+TREFFER: 800
+VGL KMP: 1898877
+ZEIT KMP: 0.4564599 Sekunden
+VGL BM: 2457023
+ZEIT BM: 0.6758366 Sekunden
+VGL NAIVE: 2903771
+ZEIT NAIVE: 0.4353025 Sekunden
+
+IN: -p ATTTAAAT -a KMP src/test/resources/T.thermophilus.fasta --debug --time
+TREFFER: 1
+VGL KMP: 1894884
+ZEIT KMP: 0.5084049 Sekunden
+VGL BM: 2215843
+ZEIT BM: 0.6608189 Sekunden
+VGL NAIVE: 2217868
+ZEIT NAIVE: 0.4503031 Sekunden
+
+/**
+* Diese Sequencen sind Relevant, da sie palindrome Erkennungssequenzen für
+* häufig genutzte Restriktionsenzyme sind. Die ausgegebenen Positionen sind
+* Schnittstellen ebenjener Restriktionsenzyme
+**/
+
+1c.)
+IN: -f src/test/resources/CytochromeC.fasta -a KMP src/test/resources/T.thermophilus.fasta --debug --time --position
+TREFFER: 1
+POS: 1583323
+VGL KMP: 1897252
+ZEIT KMP: 0.466991 Sekunden
+VGL BM: 2195497
+ZEIT BM: 0.4329318 Sekunden
+VGL NAIVE: 2699452
+ZEIT NAIVE: 0.4805657 Sekunden
+
+1d.)
+IN: -f src/test/resources/DNAPolyIIIalpha.fasta -a NAIVE src/test/resources/T.thermophilus.fasta --debug --time --position -t
+TREFFER: 1
+Codierende ORF: 1
+POS: 1712093 (Gegenstrang)
+ZEIT KMP: 44.7291761 Sekunden
+ZEIT BM: 44.7740977 Sekunden
+ZEIT NAIVE: 50.4510953 Sekunden
+
+/** Im Menschlichen Genom müssten Spleißstellen berücksichtigt werden
+* Daher kann das Protein kodiert werden, ohne das es als zusammenhängende Sequenz vorkommt.
+**/
+
+1e.)
+NAIVE:
+Besonders gut : T="AAAAAAAAAA", P="TTTTTTTT"
+Besonders schlecht: T="ACCCTTTTAAA", P="CTC"
+
+KMP:
+Besonders gut: T="AAAAAA", P="AAA"
+Besonders schlecht: T="AATAATAAT", P="AAC"
+
+BM:
+Besonders gut: T="AAAAAAA", P="AAAC"
+Besonders schlecht: T="AAAAAA", P="AAA"
+
+
+
+
+2.)
+
+Allgemein ist der Naive Algorithmus nur bei sehr langen Patterns (in der Größenordnung des Textes) zu empfehlen, da
+die anderen Algorithmen entsprechend mit ihrer Vorverarbeitung sehr viel Zeit verbrauchen.
+KMP eignet sich hingegen sehr bei homologen Sequencen bzw. wenn wir erwarten, dass unser Pattern sehr häufig in unserem
+Text vorkommt.
+BM durchsucht sehr schnell Texte mit disjunkten Pattern und schafft dabei als einziges eine sublineare Laufzeit
+zu erreichen vor allem wenn die disjunkten Stellen oft im hinteren Teil des Patterns vorkommen.
+
+
+
+KMP eignet sich in der Anwendung bei der Analyse sich wiederholender Sequenzen (Repeats).
+
+Der Naive Algorithmus eignet sich bei dem Vergleich von Proteinsubstrukturen mit der Gesamtstruktur
+wie bei Tetrameren etc.
+
+BM eignet sich für hoch Trp reiche Regionen, da solche Aminosäuren seltener kodiert werden und damit disjunkter zum
+restlichen Genom sind.

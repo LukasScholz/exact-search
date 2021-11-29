@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group 'de.unijena.bioinf.dm.2021.grp02'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'info.picocli:picocli:4.6.2'
+    implementation 'org.jetbrains:annotations:22.0.0'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+
+apply plugin: 'maven-publish'
+apply plugin: 'application'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
